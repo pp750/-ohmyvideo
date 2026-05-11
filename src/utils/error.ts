@@ -1,3 +1,4 @@
+﻿
 // utils/error.ts
 import { serializeError } from "serialize-error";
 import { isAxiosError } from "axios";
@@ -14,6 +15,7 @@ export interface NormalizedError {
 }
 
 export function normalizeError(error: unknown): NormalizedError {
+
   // Axios 特殊处理
   if (isAxiosError(error)) {
     return {
@@ -30,6 +32,7 @@ export function normalizeError(error: unknown): NormalizedError {
     };
   }
 
+
   // 普通 Error，用 serialize-error 处理
   if (error instanceof Error) {
     const serialized = serializeError(error);
@@ -43,6 +46,7 @@ export function normalizeError(error: unknown): NormalizedError {
     };
   }
 
+
   // 非 Error
   return {
     name: "UnknownError",
@@ -50,6 +54,7 @@ export function normalizeError(error: unknown): NormalizedError {
     meta: { raw: serializeError(error) },
   };
 }
+
 
 // 提取自定义属性
 function extractMeta(obj: Record<string, unknown>): Record<string, unknown> | undefined {
