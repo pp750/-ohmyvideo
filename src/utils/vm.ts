@@ -13,6 +13,7 @@ import { createMinimax } from "vercel-minimax-ai-provider";
 import FormData from "form-data";
 import jsonwebtoken from "jsonwebtoken";
 import u from "@/utils";
+
 export default function runCode(code: string, vendor?: Record<string, any>) {
   code = code.replace(/export\s*\{\s*\};?/g, ""); // 去掉 export {} 以免沙盒环境报错
   // 创建一个沙盒
@@ -54,13 +55,15 @@ export default function runCode(code: string, vendor?: Record<string, any>) {
 
   return exports as Record<string, any>;
 }
+
 export function logger(logstring: any) {
   console.log("【VM】" + JSON.stringify(logstring));
 }
+
 /**
  * 压缩图片，目标字节数不高于 size
  */
-export // async function zipImage(completeBase64: string, size: number): Promise<string> {
+export async function zipImage(completeBase64: string, size: number): Promise<string> {
   let quality = 80;
   let buffer = Buffer.from(completeBase64.split(",")[1], "base64");
   let output = await sharp(buffer).jpeg({ quality }).toBuffer();
@@ -71,24 +74,32 @@ export // async function zipImage(completeBase64: string, size: number): Promise
   return "data:image/jpeg;base64," + output.toString("base64");
 }
 
-export // async function zipImageResolution(completeBase64: string, width: number, height: number): Promise<string> {
+/**
+ * 按分辨率压缩图片
+ */
+export async function zipImageResolution(completeBase64: string, width: number, height: number): Promise<string> {
   const buffer = Buffer.from(completeBase64.split(",")[1], "base64");
   const out = await sharp(buffer).resize(width, height).toBuffer();
   return `data:image/jpeg;base64,${out.toString("base64")}`;
 }
 
-//url转Base64
-export // async function urlToBase64(url: string): Promise<string> {
+/**
+ * URL转Base64
+ */
+export async function urlToBase64(url: string): Promise<string> {
   const res = await axios.get(url, { responseType: "arraybuffer" });
   const mime = res.headers["content-type"] || "image/jpeg";
   const b64 = Buffer.from(res.data).toString("base64");
   return `data:${mime};base64,${b64}`;
 }
 
-export // async function pollTask(
+/**
+ * 轮询任务直到完成或超时
+ */
+export async function pollTask(
   fn: () => Promise<{ completed: boolean; data?: string; error?: string }>,
   interval = 3000,
-  timeout = 3000000,
+  timeout = 300000,
 ): Promise<{ completed: boolean; data?: string; error?: string }> {
   const start = Date.now();
   while (Date.now() - start < timeout) {
@@ -110,9 +121,9 @@ export // async function pollTask(
  * @param maxSize - 最大输出大小，支持格式如 "10mb", "5MB", "1024kb" 等
  * @returns 拼接后的图片base64字符串
  */
-export // async function mergeImages(imageBase64List: string[], maxSize = "10mb"): Promise<string> {
+export async function mergeImages(imageBase64List: string[], maxSize = "10mb"): Promise<string> {
   if (imageBase64List.length === 0) {
-    // throw new Error("图片列表不能为空");
+    throw new Error("图片列表不能为空");
   }
 
   const maxBytes = parseSize(maxSize);
@@ -164,7 +175,7 @@ export // async function mergeImages(imageBase64List: string[], maxSize = "10mb"
 function parseSize(size: string): number {
   const match = size.toLowerCase().match(/^(\d+(?:\.\d+)?)\s*(kb|mb|gb|b)?$/);
   if (!match) {
-    // throw new Error(`无效的大小格式: ${size}`);
+    throw new Error(`无效的大小格式: ${size}`);
   }
   const value = parseFloat(match[1]);
   const unit = match[2] || "b";
@@ -188,7 +199,7 @@ function base64ToBuffer(base64: string): Buffer {
 /**
  * 压缩Buffer到指定大小以内
  */
-// async function compressToSize(imageBuffer: Buffer, maxBytes: number, originalWidth: number, originalHeight: number): Promise<Buffer> {
+async function compressToSize(imageBuffer: Buffer, maxBytes: number, originalWidth: number, originalHeight: number): Promise<Buffer> {
   let quality = 90;
   let scale = 1;
 
