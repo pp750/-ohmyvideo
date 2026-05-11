@@ -3,7 +3,6 @@ import u from "@/utils";
 import { z } from "zod";
 import { success } from "@/lib/responseFormat";
 import { validateFields } from "@/middleware/middleware";
-import { id } from "zod/locales";
 const router = express.Router();
 
 // 批量删除资产
