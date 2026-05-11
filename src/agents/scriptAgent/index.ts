@@ -1,4 +1,4 @@
-import { Socket } from "socket.io";
+﻿import { Socket } from "socket.io";
 import { tool, jsonSchema } from "ai";
 import { z } from "zod";
 import u from "@/utils";
@@ -244,7 +244,7 @@ async function consumeFullStream(
   let thinkTime = 0;
   let fullResponse = "";
 
-  try {
+  // try {
     for await (const chunk of fullStream) {
       await new Promise<void>((resolve) => setTimeout(() => resolve(), 1));
       if (syncMsg) {
