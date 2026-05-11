@@ -1,4 +1,4 @@
-import { Socket } from "socket.io";
+﻿import { Socket } from "socket.io";
 import { z } from "zod";
 import { tool, jsonSchema } from "ai";
 import u from "@/utils";
@@ -452,7 +452,7 @@ function removeAllXmlTags(text: string): string {
   return text.trim();
 }
 
-export function buildSkillPrompt(skills: { name: string; description: string }[]): string {
+// export function buildSkillPrompt(skills: { name: string; description: string }[]): string {
   const skillEntries = skills
     .map((s) => `  <skill>\n    <name>${s.name}</name>\n    <description>${s.description}</description>\n  </skill>`)
     .join("\n");
