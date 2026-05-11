@@ -1,4 +1,4 @@
-import db from "@/utils/db";
+﻿import db from "@/utils/db";
 
 const taskStateMap = {
   "0": "进行中",
@@ -29,7 +29,7 @@ export default async function taskRecord(
   } else if (typeof content === "string") {
     opteorContent = content;
   } else if (typeof content === "function") {
-    throw new Error("不支持的类型");
+    // throw new Error("不支持的类型");
   } else {
     try {
       opteorContent = JSON.stringify(content);
