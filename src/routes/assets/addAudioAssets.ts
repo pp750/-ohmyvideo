@@ -25,7 +25,7 @@ export default router.post(
     const { name, describe, projectId, assetsItem } = req.body;
     await Promise.all(
       assetsItem.map(async (i: { src?: string; base64: string; prompt: string }) => {
-        // if (if (i.base64) {)
+        if (i.base64) {
           const mimeMatch = i.base64.match(/^data:audio\/([^;]+);base64,/);
           const mimeExt = mimeMatch ? mimeMatch[1] : "mp3";
           const mimeToExt: Record<string, string> = {
