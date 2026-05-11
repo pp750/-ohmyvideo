@@ -1,4 +1,4 @@
-import { transform } from "sucrase";
+﻿import { transform } from "sucrase";
 import fs from "fs";
 import path from "path";
 import u from "@/utils";
@@ -19,7 +19,7 @@ export function getCode(id: string): string {
   return fs.readFileSync(targetFile, "utf-8");
 }
 
-export async function getModelList(id: string): Promise<Array<any>> {
+export // async function getModelList(id: string): Promise<Array<any>> {
   const models = await u.db("o_vendorConfig").where("id", id).select("models").first();
   if (!models || !models.models) return [];
   const code = getCode(id);
