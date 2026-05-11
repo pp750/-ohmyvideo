@@ -1,4 +1,4 @@
-import { EventEmitter } from "events";
+﻿import { EventEmitter } from "events";
 import { o_novel } from "@/types/database";
 import u from "@/utils";
 import { stripThink } from "@/utils/stripThink";
@@ -63,6 +63,7 @@ class CleanNovel {
   async start(allChapters: o_novel[], projectId: number): Promise<EventType[]> {
     const totalEvent: EventType[] = [];
 
+
     // 并发控制：通过信号量限制同时执行的任务数
     let running = 0;
     let index = 0;
@@ -79,6 +80,7 @@ class CleanNovel {
         return runNext();
       });
     };
+
 
     // 启动最多 concurrency 个并发任务
     const workers = Array.from({ length: Math.min(this.concurrency, allChapters.length) }, () => runNext());
