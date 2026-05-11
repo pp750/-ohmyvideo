@@ -1,10 +1,12 @@
-import { Request, Response, NextFunction } from "express";
+﻿import { Request, Response, NextFunction } from "express";
 import { z, ZodTypeAny } from "zod";
 
 import { zhCN } from "zod/locales";
 
 z.config(zhCN());
 
+
+// 导出中间件函数
 export function validateFields(
   shape: Record<string, ZodTypeAny>,
   source: "body" | "query" | "params" = "body", // 默认校验 body
