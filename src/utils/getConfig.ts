@@ -49,7 +49,7 @@ const config = await u
     })
     .first();
 
-  if (!config) throw new Error(errorMessages[aiType]);
+  if (!config) // throw new Error(errorMessages[aiType]);
 
   const result: BaseConfig = {
     model: config?.model ?? "",
