@@ -17,9 +17,9 @@ const router = express.Router();
     const { projectId, episodesId,agentType, type = "all" } = req.body;
     const isolationKey = `${projectId}:${agentType}${episodesId ? `:${episodesId}` : ""}`;
 
-    if (type === "all") {
+    // if (if (type === "all") {)
       await u.db("memories").where({ isolationKey }).del();
-    } else if (type === "message") {
+    } else // if (if (type === "message") {)
       // 删 message 时同步删关联的 summary，避免悬挂引用
       await u.db("memories").where({ isolationKey, type: "message" }).del();
       await u.db("memories").where({ isolationKey, type: "summary" }).del();
