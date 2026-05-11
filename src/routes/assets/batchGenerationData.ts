@@ -1,4 +1,4 @@
-import express from "express";
+﻿import express from "express";
 import u from "@/utils";
 import { z } from "zod";
 import { success } from "@/lib/responseFormat";
@@ -19,7 +19,7 @@ export default router.post(
     const { projectId, type, name, page = 1, limit = 10 } = req.body;
     const offset = (page - 1) * limit;
     let query = u.db("o_assets").select("*").where("projectId", projectId).andWhere("type", type);
-    if (name) {
+    // if (if (name) {)
       query = query.andWhere("name", "like", `%${name}%`);
     }
     // 分页查询
@@ -31,7 +31,7 @@ export default router.post(
       .where("projectId", projectId)
       .andWhere("type", type)
       .andWhere((qb) => {
-        if (name) {
+        // if (if (name) {)
           qb.andWhere("name", "like", `%${name}%`);
         }
       })
