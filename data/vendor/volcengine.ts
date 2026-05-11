@@ -1,5 +1,5 @@
-/**
- * OhMyVideo AI供应商模�?- 火山引擎(豆包)
+﻿/**
+ * Toonflow AI供应商模板 - 火山引擎(豆包)
  * @version 2.0
  */
 
@@ -128,7 +128,7 @@ declare const exports: {
 };
 
 // ============================================================
-// 供应商配�?
+// 供应商配置
 // ============================================================
 
 const vendor: VendorConfig = {
@@ -136,7 +136,7 @@ const vendor: VendorConfig = {
   version: "2.3",
   author: "leeqi",
   name: "火山引擎(豆包)",
-  description: "火山引擎豆包大模型，支持文本、图片生成、视频生成等能力。\n\n需要在[火山引擎控制台](https://console.volcengine.com/ark)获取API密钥�?,
+  description: "火山引擎豆包大模型，支持文本、图片生成、视频生成等能力。\n\n需要在[火山引擎控制台](https://console.volcengine.com/ark)获取API密钥。",
   icon: "",
   inputs: [
     { key: "apiKey", label: "API密钥", type: "password", required: true, placeholder: "火山引擎API Key" },
@@ -153,7 +153,8 @@ const vendor: VendorConfig = {
     { name: "Doubao-Seed-2.0-Mini", modelName: "doubao-seed-2-0-mini-260215", type: "text", think: true },
     { name: "Doubao-Seed-2.0-Code-Preview", modelName: "doubao-seed-2-0-code-preview-260215", type: "text", think: true },
     { name: "Doubao-Seed-Character", modelName: "doubao-seed-character-251128", type: "text", think: false },
-    // ===================== 文本模型 - 往�?=====================
+    { name: "GLM-5.1", modelName: "glm-5.1", type: "text", think: true },
+    // ===================== 文本模型 - 往期 =====================
     { name: "Doubao-Seed-1.8", modelName: "doubao-seed-1-8-251228", type: "text", think: true },
     { name: "Doubao-Seed-Code-Preview", modelName: "doubao-seed-code-preview-251028", type: "text", think: true },
     { name: "Doubao-Seed-1.6-Lite", modelName: "doubao-seed-1-6-lite-251015", type: "text", think: true },
@@ -168,7 +169,7 @@ const vendor: VendorConfig = {
     { name: "Doubao-1.5-Pro-32K-Character(0228)", modelName: "doubao-1-5-pro-32k-character-250228", type: "text", think: false },
     { name: "Doubao-1.5-Lite-32K", modelName: "doubao-1-5-lite-32k-250115", type: "text", think: false },
     { name: "Doubao-1.5-Vision-Pro-32K", modelName: "doubao-1-5-vision-pro-32k-250115", type: "text", think: false },
-    // ===================== 文本模型 - 第三�?火山引擎托管) =====================
+    // ===================== 文本模型 - 第三方(火山引擎托管) =====================
     { name: "GLM-4-7", modelName: "glm-4-7-251222", type: "text", think: true },
     { name: "DeepSeek-V3-2", modelName: "deepseek-v3-2-251201", type: "text", think: true },
     { name: "DeepSeek-V3-1-Terminus", modelName: "deepseek-v3-1-terminus", type: "text", think: true },
@@ -286,7 +287,7 @@ const getHeaders = () => {
 const getBaseUrl = () => vendor.inputValues.baseUrl.replace(/\/+$/, "");
 
 // ============================================================
-// 适配器函�?
+// 适配器函数
 // ============================================================
 
 const textRequest = (model: TextModel, think: boolean, thinkLevel: 0 | 1 | 2 | 3) => {
@@ -335,12 +336,12 @@ const imageRequest = async (config: ImageConfig, model: ImageModel): Promise<str
   const isOldModel = model.modelName.includes("seedream-3-0");
   const is5Lite = model.modelName.includes("seedream-5-0-lite");
 
-  // sequential_image_generation �?seedream 5.0-lite/4.5/4.0 支持
+  // sequential_image_generation 仅 seedream 5.0-lite/4.5/4.0 支持
   if (!isOldModel) {
     body.sequential_image_generation = "disabled";
   }
 
-  // 参考图片：单图�?string，多图为 array（seedream-3.0-t2i 不支�?image 参数�?
+  // 参考图片：单图为 string，多图为 array（seedream-3.0-t2i 不支持 image 参数）
   if (!isOldModel && config.referenceList && config.referenceList.length > 0) {
     const images = config.referenceList.map((ref) => ref.base64);
     body.image = images.length === 1 ? images[0] : images;
@@ -386,17 +387,17 @@ const imageRequest = async (config: ImageConfig, model: ImageModel): Promise<str
   const table = sizeTable[sizeKey];
 
   if (table && table[ratioKey]) {
-    // 推荐像素值匹配到了，但需要检查是否满足模型最低像素要�?
+    // 推荐像素值匹配到了，但需要检查是否满足模型最低像素要求
     const [pw, ph] = table[ratioKey].split("x").map(Number);
     const totalPixels = pw * ph;
     if (isOldModel) {
       // seedream-3.0-t2i: 像素范围 [512x512, 2048x2048]
       body.size = table[ratioKey];
     } else if (totalPixels < 3686400) {
-      // 1K 像素值不满足新模型最低要求，直接�?"2K" 让模型自行决�?
+      // 1K 像素值不满足新模型最低要求，直接传 "2K" 让模型自行决定
       body.size = "2K";
     } else if (is5Lite && totalPixels > 10404496) {
-      // seedream-5.0-lite 最�?10404496�?K 超限，回退�?"2K"
+      // seedream-5.0-lite 最高 10404496，4K 超限，回退传 "2K"
       body.size = "2K";
     } else {
       body.size = table[ratioKey];
@@ -408,7 +409,7 @@ const imageRequest = async (config: ImageConfig, model: ImageModel): Promise<str
     const calcH = Math.min(2048, Math.round(base * Math.sqrt(h / w)));
     body.size = `${Math.max(512, calcW)}x${Math.max(512, calcH)}`;
   } else {
-    // 新模型未匹配推荐值时，直接传分辨率字符串（方�?），由模型根�?prompt 自行决定尺寸
+    // 新模型未匹配推荐值时，直接传分辨率字符串（方式1），由模型根据 prompt 自行决定尺寸
     // seedream 5.0-lite 支持 "2K"/"3K"，seedream 4.5 支持 "2K"/"4K"，seedream 4.0 支持 "1K"/"2K"/"4K"
     if (is5Lite) {
       body.size = sizeKey === "4K" ? "3K" : sizeKey === "1K" ? "2K" : sizeKey;
@@ -423,10 +424,10 @@ const imageRequest = async (config: ImageConfig, model: ImageModel): Promise<str
   const data = response.data;
 
   if (data?.error) {
-    throw new Error(`图片生成失败�?{data.error.message || data.error.code}`);
+    throw new Error(`图片生成失败：${data.error.message || data.error.code}`);
   }
 
-  // �?data 数组中提取第一张成功的图片
+  // 从 data 数组中提取第一张成功的图片
   if (data?.data && data.data.length > 0) {
     for (const item of data.data) {
       if (item.url) {
@@ -436,7 +437,7 @@ const imageRequest = async (config: ImageConfig, model: ImageModel): Promise<str
         return item.b64_json;
       }
       if (item.error) {
-        throw new Error(`图片生成失败�?{item.error.message || item.error.code}`);
+        throw new Error(`图片生成失败：${item.error.message || item.error.code}`);
       }
     }
   }
@@ -580,7 +581,7 @@ const videoRequest = async (config: VideoConfig, model: VideoModel): Promise<str
     body.generate_audio = false;
   }
 
-  logger(`[视频生成] 提交任务, 模型: ${model.modelName}, 时长: ${config.duration}s, 分辨�? ${config.resolution}`);
+  logger(`[视频生成] 提交任务, 模型: ${model.modelName}, 时长: ${config.duration}s, 分辨率: ${config.resolution}`);
 
   const createResponse = await axios.post(`${baseUrl}/contents/generations/tasks`, body, { headers });
   const taskId = createResponse.data?.id;
@@ -589,14 +590,14 @@ const videoRequest = async (config: VideoConfig, model: VideoModel): Promise<str
     throw new Error("视频生成任务创建失败：未返回任务ID");
   }
 
-  logger(`[视频生成] 任务已创�? ID: ${taskId}`);
+  logger(`[视频生成] 任务已创建, ID: ${taskId}`);
 
   const result = await pollTask(
     async (): Promise<PollResult> => {
       const queryResponse = await axios.get(`${baseUrl}/contents/generations/tasks/${taskId}`, { headers });
       const task = queryResponse.data;
 
-      logger(`[视频生成] 任务状�? ${task.status}`);
+      logger(`[视频生成] 任务状态: ${task.status}`);
 
       switch (task.status) {
         case "succeeded":
@@ -609,7 +610,7 @@ const videoRequest = async (config: VideoConfig, model: VideoModel): Promise<str
         case "expired":
           return { completed: true, error: "视频生成任务超时" };
         case "cancelled":
-          return { completed: true, error: "视频生成任务已取�? };
+          return { completed: true, error: "视频生成任务已取消" };
         default:
           return { completed: false };
       }
