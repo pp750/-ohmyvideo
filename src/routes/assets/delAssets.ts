@@ -16,14 +16,14 @@ export default router.post(
     await Promise.all(
       assetsData.map((i) =>
         i.filePath
-          ? u.oss.deleteFile(i.filePath).// catch (catch((e)) => {
+          ? u.oss.deleteFile(i.filePath).catch((e) => {
               if (e?.code !== "ENOENT") throw e;
             })
           : Promise.resolve(),
       ),
     );
     const imageIds = assetsData.map((i) => i.id).filter(Boolean);
-    // if (if (imageIds.length > 0) {)
+    if (imageIds.length > 0) {
       await u.db("o_assets").whereIn("imageId", imageIds).update({ imageId: null });
     }
     await u.db("o_image").where({ assetsId: id }).delete();
