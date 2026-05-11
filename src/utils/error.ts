@@ -1,5 +1,4 @@
-﻿
-// utils/error.ts
+﻿// utils/error.ts
 import { serializeError } from "serialize-error";
 import { isAxiosError } from "axios";
 
@@ -12,6 +11,32 @@ export interface NormalizedError {
   cause?: NormalizedError;
   responseData?: unknown;
   meta?: Record<string, unknown>;
+}
+
+export enum ErrorCategory {
+  NETWORK = "NETWORK",
+  VALIDATION = "VALIDATION",
+  AUTHENTICATION = "AUTHENTICATION",
+  PERMISSION = "PERMISSION",
+  NOT_FOUND = "NOT_FOUND",
+  RATE_LIMIT = "RATE_LIMIT",
+  SERVER = "SERVER",
+  UNKNOWN = "UNKNOWN",
+}
+
+export function categorizeError(error: NormalizedError): ErrorCategory {
+  if (error.status) {
+    if (error.status >= 500) return ErrorCategory.SERVER;
+    if (error.status === 404) return ErrorCategory.NOT_FOUND;
+    if (error.status === 403) return ErrorCategory.PERMISSION;
+    if (error.status === 401) return ErrorCategory.AUTHENTICATION;
+    if (error.status === 429) return ErrorCategory.RATE_LIMIT;
+    if (error.status >= 400) return ErrorCategory.VALIDATION;
+  }
+  if (error.code === "ECONNREFUSED" || error.code === "ENOTFOUND" || error.code === "ETIMEDOUT") {
+    return ErrorCategory.NETWORK;
+  }
+  return ErrorCategory.UNKNOWN;
 }
 
 export function normalizeError(error: unknown): NormalizedError {
@@ -68,6 +93,11 @@ function extractMeta(obj: Record<string, unknown>): Record<string, unknown> | un
   }
 
   return Object.keys(meta).length > 0 ? meta : undefined;
+}
+
+export function isRetryableError(error: NormalizedError): boolean {
+  const category = categorizeError(error);
+  return category === ErrorCategory.NETWORK || category === ErrorCategory.SERVER || category === ErrorCategory.RATE_LIMIT;
 }
 
 export default normalizeError;
