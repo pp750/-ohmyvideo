@@ -1,4 +1,4 @@
-import { tool, jsonSchema, Tool } from "ai";
+﻿import { tool, jsonSchema, Tool } from "ai";
 import u from "@/utils";
 import { z } from "zod";
 import _ from "lodash";
@@ -41,7 +41,7 @@ export default (toolCpnfig: ToolConfig) => {
           .toJSONSchema(),
       ),
       execute: async ({ chapterIndexs }) => {
-        console.log("[tools] get_novel_events", chapterIndexs);
+        // console.log("[tools] get_novel_events", chapterIndexs);
         const thinking = msg.thinking("正在查询章节事件...");
         const data = await u
           .db("o_novel")
@@ -66,7 +66,7 @@ export default (toolCpnfig: ToolConfig) => {
           .toJSONSchema(),
       ),
       execute: async ({ key }) => {
-        console.log("[tools] get_planData", key);
+        // console.log("[tools] get_planData", key);
         const thinking = msg.thinking(`正在获取${planDataKeyLabels[key]}工作区数据...`);
         const planData: planData = await new Promise((resolve) => socket.emit("getPlanData", { key }, (res: any) => resolve(res)));
         thinking.appendText(`获取到${planDataKeyLabels[key]}:\n` + planData[key]);
@@ -85,7 +85,7 @@ export default (toolCpnfig: ToolConfig) => {
           .toJSONSchema(),
       ),
       execute: async ({ chapterIndex }) => {
-        console.log("[tools] get_novel_text", "[tools] get_novel_text", chapterIndex);
+        // console.log("[tools] get_novel_text", "[tools] get_novel_text", chapterIndex);
         const thinking = msg.thinking(`正在获取小说章节原文...`);
         const data = await u.db("o_novel").where("projectId", resTool.data.projectId).where({ chapterIndex }).select("chapterData").first();
         const text = data && data?.chapterData ? data.chapterData : "";
@@ -105,7 +105,7 @@ export default (toolCpnfig: ToolConfig) => {
           .toJSONSchema(),
       ),
       execute: async ({ ids }) => {
-        console.log("[tools] get_script_content", "[tools] get_script_content", ids);
+        // console.log("[tools] get_script_content", "[tools] get_script_content", ids);
         const thinking = msg.thinking(`正在获取脚本内容...`);
         const data = await u.db("o_script").whereIn("id", ids).select("content", "name");
         const text = data && data.length ? data.map((d) => `<scriptItem name="${d.name}">${d.content}</scriptItem>`).join("\n") : "";
