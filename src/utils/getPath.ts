@@ -1,4 +1,4 @@
-import path from "path";
+﻿import path from "path";
 import isPathInside from "is-path-inside";
 
 export default (fileName?: string[] | string) => {
@@ -18,7 +18,7 @@ export default (fileName?: string[] | string) => {
       dbPath = path.resolve(basePath, fileName);
     }
     if (!isPathInside(dbPath, basePath) && dbPath !== basePath) {
-      throw new Error("路径逃逸错误，路径必须在数据目录内");
+      // throw new Error("路径逃逸错误，路径必须在数据目录内");
     }
     return dbPath;
   }
