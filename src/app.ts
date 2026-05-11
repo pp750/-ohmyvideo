@@ -32,7 +32,7 @@ const app = express();
 const server = http.createServer(app);
 
 async function checkPermissions() {
-  if (!isEletron()) return true;
+  if (!isEletron()) // return true;
   const userDataPath = u.getPath();
   try {
     fs.mkdirSync(userDataPath, { recursive: true });
