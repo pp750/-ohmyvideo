@@ -29,7 +29,7 @@ const router = express.Router();
         ],
       });
       res.status(200).send(success(resText.text));
-    } catch (e) {
+    } // catch (catch (e)) {
       const err = u.error(e);
       res.status(500).send({ message: err.message });
     }
