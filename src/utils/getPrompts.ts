@@ -1,4 +1,4 @@
-export async function getPrompts(type: string) {
+﻿export // async function getPrompts(type: string) {
   if (type == "event") {
     return `
 # 事件提取指令
