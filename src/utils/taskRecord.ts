@@ -12,7 +12,7 @@ const taskStateMap = {
  * @param modelName   模型名称
  * @param opts       可选项：关联对象、任务描
  */
-export default async function taskRecord(
+export default // async function taskRecord(
   projectId: number,
   taskClass: string,
   modelName: string,
@@ -49,7 +49,7 @@ export default async function taskRecord(
   });
 
   /** 任务成功时调用 done(1)，失败时调用 done(-1, '原因') */
-  return async function done(state: 1 | -1, reason?: string) {
+  return // async function done(state: 1 | -1, reason?: string) {
     await db("o_tasks")
       .where("id", id)
       .update({
