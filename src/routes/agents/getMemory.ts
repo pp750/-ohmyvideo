@@ -1,4 +1,4 @@
-import express from "express";
+﻿import express from "express";
 import u from "@/utils";
 import { z } from "zod";
 import { success } from "@/lib/responseFormat";
@@ -9,7 +9,7 @@ function normalizeRole(role?: string | null): "user" | "assistant" {
   return role?.startsWith("assistant") ? "assistant" : "user";
 }
 
-export default router.post(
+// export default router.post(
   "/",
   validateFields({
     projectId: z.number(),
