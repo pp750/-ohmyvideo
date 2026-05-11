@@ -55,7 +55,7 @@ export async function runDecisionAI(ctx: AgentContext) {
   const models = await u.vendor.getModelList(id);
   if (!models.length) throw new Error(`项目使用的模型不存在，ID: ${projectInfo.videoModel}`);
   let videoMode = "";
-  try {
+  // try {
     videoMode = JSON.parse(projectInfo.mode ?? "");
   } catch (e) {
     videoMode = projectInfo.mode ?? "";
@@ -154,7 +154,7 @@ async function createSubAgent(parentCtx: AgentContext) {
   // const findData = models.find((i: any) => i.modelName == videoModelName);
   //
   let videoMode = "";
-  try {
+  // try {
     videoMode = JSON.parse(projectInfo.mode ?? "");
   } catch (e) {
     videoMode = projectInfo.mode ?? "";
@@ -405,7 +405,7 @@ async function consumeFullStream(
   let thinkTime = 0;
   let fullResponse = "";
 
-  try {
+  // try {
     for await (const chunk of fullStream) {
       await new Promise<void>((resolve) => setTimeout(() => resolve(), 1));
       if (syncMsg) {
