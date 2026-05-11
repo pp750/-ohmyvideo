@@ -14,7 +14,7 @@ type TableName = keyof DB & string;
 type RowType<TName extends TableName> = DB[TName];
 
 const dbPath = getPath("db2.sqlite");
-console.log("数据库目录:", dbPath);
+// console.log("数据库目录:", dbPath);
 const dbDir = path.dirname(dbPath);
 
 
