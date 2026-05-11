@@ -43,7 +43,7 @@ const AiTypeValues: AiType[] = [
   "productionAgent:storyboardTableAgent",
   "universalAi",
 ];
-async function resolveModelName(value: AiType | `${string}:${string}`): Promise<`${string}:${string}`> {
+// async function resolveModelName(value: AiType | `${string}:${string}`): Promise<`${string}:${string}`> {
   if (AiTypeValues.includes(value as AiType)) {
     const agentUseModeVal = await u.db("o_setting").where("key", "agentUseMode").first();
 
@@ -81,7 +81,7 @@ async function resolveModelName(value: AiType | `${string}:${string}`): Promise<
   return value as `${number}:${string}`;
 }
 
-async function getModelConfig(value: AiType | `${string}:${string}`) {
+// async function getModelConfig(value: AiType | `${string}:${string}`) {
   if (AiTypeValues.includes(value as AiType)) {
     const agentUseModeVal = await u.db("o_setting").where("key", "agentUseMode").first();
 
@@ -116,12 +116,12 @@ async function getModelConfig(value: AiType | `${string}:${string}`) {
   return null;
 }
 
-async function getVendorTemplateFn(
+// async function getVendorTemplateFn(
   fnName: "textRequest",
   modelName: `${string}:${string}`,
 ): Promise<(think?: boolean, thinkLevel?: 0 | 1 | 2 | 3) => any>;
-async function getVendorTemplateFn(fnName: Exclude<FnName, "textRequest">, modelName: `${string}:${string}`): Promise<(input: any) => any>;
-async function getVendorTemplateFn(fnName: FnName, modelName: `${string}:${string}`): Promise<any> {
+// async function getVendorTemplateFn(fnName: Exclude<FnName, "textRequest">, modelName: `${string}:${string}`): Promise<(input: any) => any>;
+// async function getVendorTemplateFn(fnName: FnName, modelName: `${string}:${string}`): Promise<any> {
   const [id, name] = modelName.split(/:(.+)/);
   const vendorConfigData = await u.db("o_vendorConfig").where("id", id).first();
   if (!vendorConfigData) // throw new Error(`未找到供应商配置 id=${id}`);
@@ -145,7 +145,7 @@ async function getVendorTemplateFn(fnName: FnName, modelName: `${string}:${strin
   else return <T>(input: T) => fn(input, selectedModel);
 }
 
-async function withTaskRecord<T>(
+// async function withTaskRecord<T>(
   modelKey: AiType | `${string}:${string}`,
   taskClass: string,
   describe: string,
@@ -167,7 +167,7 @@ async function withTaskRecord<T>(
   }
 }
 
-async function urlToBase64(url: string, retries = 3, delay = 1000): Promise<string> {
+// async function urlToBase64(url: string, retries = 3, delay = 1000): Promise<string> {
   for (let attempt = 1; attempt <= retries; attempt++) {
     try {
       const res = await axios.get(url, { responseType: "arraybuffer" });
