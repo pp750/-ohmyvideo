@@ -49,7 +49,7 @@ export default dbClient;
 
 export { db };
 
-async function initKnexType(knexDb: any) {
+// async function initKnexType(knexDb: any) {
   const { Client } = await import("@rmp135/sql-ts");
   const outFile = "src/types/database.d.ts";
   const dbClient = Client.fromConfig({
