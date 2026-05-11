@@ -76,14 +76,14 @@ export default async function startServe(randomPort: Boolean = false) {
   if (!fs.existsSync(ossDir)) {
     fs.mkdirSync(ossDir, { recursive: true });
   }
-  console.log("文件目录:", ossDir);
+  // console.log("文件目录:", ossDir);
   app.use("/oss", express.static(ossDir, { acceptRanges: false }));
   // skills 静态资源
   const skillsDir = u.getPath("skills");
   if (!fs.existsSync(skillsDir)) {
     fs.mkdirSync(skillsDir, { recursive: true });
   }
-  console.log("文件目录:", skillsDir);
+  // console.log("文件目录:", skillsDir);
   // 只允许图片文件访问
   app.use(
     "/skills",
@@ -98,16 +98,16 @@ export default async function startServe(randomPort: Boolean = false) {
   if (!fs.existsSync(assetsDir)) {
     fs.mkdirSync(assetsDir, { recursive: true });
   }
-  console.log("文件目录:", assetsDir);
+  // console.log("文件目录:", assetsDir);
   app.use("/assets", express.static(assetsDir, { acceptRanges: false }));
 
   // data/web 静态网站
   const webDir = u.getPath("web");
   if (fs.existsSync(webDir)) {
-    console.log("静态网站目录:", webDir);
+    // console.log("静态网站目录:", webDir);
     app.use(express.static(webDir, { acceptRanges: false }));
   } else {
-    console.warn("静态网站目录不存在:", webDir);
+    // console.warn("静态网站目录不存在:", webDir);
   }
 
   app.use(async (req, res, next) => {
@@ -142,7 +142,7 @@ export default async function startServe(randomPort: Boolean = false) {
   app.use((err: any, _: Request, res: Response, __: NextFunction) => {
     res.locals.message = err.message;
     res.locals.error = err;
-    console.error(err);
+    // console.error(err);
     res.status(err.status || 500).send(err);
   });
 
@@ -151,7 +151,7 @@ export default async function startServe(randomPort: Boolean = false) {
     server.listen(port, async () => {
       const address = server.address();
       const realPort = typeof address === "string" ? address : address?.port;
-      console.log(`[服务启动成功]: http://localhost:${realPort}`);
+      // console.log(`[服务启动成功]: http://localhost:${realPort}`);
       resolve(realPort);
     });
   });
@@ -163,7 +163,7 @@ export function closeServe(): Promise<void> {
     if (server) {
       server.close((err?: Error) => {
         if (err) return reject(err);
-        console.log("[服务已关闭]");
+        // console.log("[服务已关闭]");
         resolve();
       });
     } else {
