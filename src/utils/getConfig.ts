@@ -37,9 +37,9 @@ const errorMessages: Record<AIType, string> = {
 
 const needBaseURL: AIType[] = ["text", "video", "image"];
 
-export default // async function getConfig<T extends AIType>(aiType: T, manufacturer?: string): Promise<ResDataMap[T]> {
+export default async function getConfig<T extends AIType>(aiType: T, manufacturer?: string): Promise<ResDataMap[T]> {
   // 配置项
-const config = await u
+  const config = await u
     .db("t_config")
     .where("type", aiType)
     .modify((qb) => {
@@ -49,7 +49,7 @@ const config = await u
     })
     .first();
 
-  if (!config) // throw new Error(errorMessages[aiType]);
+  if (!config) throw new Error(errorMessages[aiType]);
 
   const result: BaseConfig = {
     model: config?.model ?? "",
@@ -62,4 +62,23 @@ const config = await u
   }
 
   return result as ResDataMap[T];
+}
+
+export async function getConfigList<T extends AIType>(aiType: T): Promise<ResDataMap[T][]> {
+  const configs = await u
+    .db("t_config")
+    .where("type", aiType)
+    .select("*");
+
+  return configs.map((config) => {
+    const result: BaseConfig = {
+      model: config?.model ?? "",
+      apiKey: config?.apiKey ?? "",
+      manufacturer: config?.manufacturer ?? "",
+    };
+    if (needBaseURL.includes(aiType)) {
+      return { ...result, baseURL: config.baseUrl } as ResDataMap[T];
+    }
+    return result as ResDataMap[T];
+  });
 }
