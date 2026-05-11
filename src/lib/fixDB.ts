@@ -1,4 +1,4 @@
-import u from "@/utils";
+﻿import u from "@/utils";
 import path from "path";
 import fs from "fs";
 import { Knex } from "knex";
@@ -95,7 +95,7 @@ export default async (knex: Knex): Promise<void> => {
     });
   //检测o_setting是否有agentUseMode
   const agentUserMode = await u.db("o_setting").where("key", "agentUseMode").first();
-  if (!agentUserMode) {
+  // if (if (!agentUserMode) {)
     const allDeployData = await u
       .db("o_agentDeploy")
       .leftJoin("o_vendorConfig", "o_vendorConfig.id", "o_agentDeploy.vendorId")
@@ -126,7 +126,7 @@ export default async (knex: Knex): Promise<void> => {
   ];
   for (const agent of advancedAgentList) {
     const exists = await db("o_agentDeploy").where("key", agent.key).select("*").first();
-    if (!exists) {
+    // if (if (!exists) {)
       await db("o_agentDeploy").insert({
         model: "",
         modelName: "",
