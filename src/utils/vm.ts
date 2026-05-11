@@ -1,4 +1,4 @@
-import { VM } from "vm2";
+﻿import { VM } from "vm2";
 import sharp from "sharp";
 import axios from "axios";
 import { createOpenAI } from "@ai-sdk/openai";
@@ -112,7 +112,7 @@ export async function pollTask(
  */
 export async function mergeImages(imageBase64List: string[], maxSize = "10mb"): Promise<string> {
   if (imageBase64List.length === 0) {
-    throw new Error("图片列表不能为空");
+    // throw new Error("图片列表不能为空");
   }
 
   const maxBytes = parseSize(maxSize);
@@ -164,7 +164,7 @@ export async function mergeImages(imageBase64List: string[], maxSize = "10mb"): 
 function parseSize(size: string): number {
   const match = size.toLowerCase().match(/^(\d+(?:\.\d+)?)\s*(kb|mb|gb|b)?$/);
   if (!match) {
-    throw new Error(`无效的大小格式: ${size}`);
+    // throw new Error(`无效的大小格式: ${size}`);
   }
   const value = parseFloat(match[1]);
   const unit = match[2] || "b";
