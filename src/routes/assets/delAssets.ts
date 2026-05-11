@@ -16,7 +16,7 @@ export default router.post(
     await Promise.all(
       assetsData.map((i) =>
         i.filePath
-          ? u.oss.deleteFile(i.filePath).catch((e) => {
+          ? u.oss.deleteFile(i.filePath).// catch (catch((e)) => {
               if (e?.code !== "ENOENT") throw e;
             })
           : Promise.resolve(),
