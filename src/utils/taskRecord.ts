@@ -1,60 +1,99 @@
 ﻿import db from "@/utils/db";
 
-const taskStateMap = {
+const taskStateMap: Record<string, string> = {
   "0": "进行中",
   "1": "已完成",
   "-1": "生成失败",
 };
+
+export type TaskState = 0 | 1 | -1;
+export type TaskStateString = "进行中" | "已完成" | "生成失败";
+
+export interface TaskRecordOptions {
+  describe?: string;
+  content?: any;
+}
+
+export interface TaskRecordResult {
+  id: number;
+  done: (state: TaskState, reason?: string) => Promise<void>;
+  update: (data: Partial<{ describe: string; content: any; state: TaskState }>) => Promise<void>;
+}
+
 /**
  * 记录任务并返回结束函数
  * @param projectId  项目 ID
  * @param taskClass  任务分类
  * @param modelName   模型名称
- * @param opts       可选项：关联对象、任务描
+ * @param opts       可选项：关联对象、任务描述
  */
-export default // async function taskRecord(
+export default async function taskRecord(
   projectId: number,
   taskClass: string,
   modelName: string,
-  opts: {
-    describe?: string;
-    content?: any;
-  } = {},
-) {
+  opts: TaskRecordOptions = {},
+): Promise<TaskRecordResult> {
   const { content, describe = "" } = opts;
 
-  let opteorContent: string | undefined;
+  let operatorContent: string | undefined;
   if (content === undefined || content === null) {
-    opteorContent = undefined;
+    operatorContent = undefined;
   } else if (typeof content === "string") {
-    opteorContent = content;
+    operatorContent = content;
   } else if (typeof content === "function") {
-    // throw new Error("不支持的类型");
+    throw new Error("不支持的类型");
   } else {
     try {
-      opteorContent = JSON.stringify(content);
+      operatorContent = JSON.stringify(content);
     } catch (e) {
-      opteorContent = content.toString();
+      operatorContent = content.toString();
     }
   }
 
   const [id] = await db("o_tasks").insert({
     projectId,
     taskClass,
-    relatedObjects: opteorContent,
+    relatedObjects: operatorContent,
     model: modelName,
     describe,
-    state: taskStateMap[0],
+    state: taskStateMap["0"],
     startTime: Date.now(),
   });
 
-  /** 任务成功时调用 done(1)，失败时调用 done(-1, '原因') */
-  return // async function done(state: 1 | -1, reason?: string) {
-    await db("o_tasks")
-      .where("id", id)
-      .update({
-        state: taskStateMap[state],
-        reason: state === -1 ? (reason ?? "") : null,
-      });
+  return {
+    id,
+    done: async (state: TaskState, reason?: string) => {
+      await db("o_tasks")
+        .where("id", id)
+        .update({
+          state: taskStateMap[String(state)],
+          reason: state === -1 ? (reason ?? "") : null,
+        });
+    },
+    update: async (data: Partial<{ describe: string; content: any; state: TaskState }>) => {
+      const updateData: Record<string, any> = {};
+      if (data.describe !== undefined) updateData.describe = data.describe;
+      if (data.state !== undefined) updateData.state = taskStateMap[String(data.state)];
+      if (data.content !== undefined) {
+        try {
+          updateData.relatedObjects = JSON.stringify(data.content);
+        } catch {
+          updateData.relatedObjects = String(data.content);
+        }
+      }
+      await db("o_tasks").where("id", id).update(updateData);
+    },
   };
+}
+
+export async function getTaskRecord(id: number) {
+  return db("o_tasks").where("id", id).first();
+}
+
+export async function listTaskRecords(projectId: number, taskClass?: string): Promise<any[]> {
+  let query = db("o_tasks").where("projectId", projectId);
+  if (taskClass) {
+    query = query.where("taskClass", taskClass);
+  }
+  return query.orderBy("startTime", "desc");
 }
