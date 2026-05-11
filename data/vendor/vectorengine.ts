@@ -136,7 +136,7 @@ declare const exports: {
 const vendor: VendorConfig = {
   id: "vectorengine",
   version: "1.1",
-  author: "Toonflow",
+  author: "ohmyvideo",
   name: "VectorEngine 图片",
   description:
     "## VectorEngine 图片生成\n\nVectorEngine AI API 中转平台，专注于图片生成。\n\n### 支持的模型\n- **GPT-Image-2**：OpenAI 最新图像生成模型，支持 1K/2K/4K 分辨率\n- **DALL-E 3**：OpenAI 高质量图像生成\n- **Midjourney**：艺术风格图像生成\n- **Stable Diffusion 3**：开源图像生成\n- **Gemini Image**：Google Gemini 图像生成\n\n### 特点\n- 兼容 OpenAI Images API 协议\n- 支持文生图、图生图、多图参考\n- 多种分辨率和宽高比\n\n🔗 [前往平台](https://api.vectorengine.ai/)\n\n> 💡 提示：请先在 VectorEngine 平台注册并获取 API Key",
