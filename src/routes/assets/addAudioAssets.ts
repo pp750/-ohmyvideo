@@ -1,4 +1,4 @@
-import express from "express";
+﻿import express from "express";
 import u from "@/utils";
 import { z } from "zod";
 import { success } from "@/lib/responseFormat";
@@ -25,7 +25,7 @@ export default router.post(
     const { name, describe, projectId, assetsItem } = req.body;
     await Promise.all(
       assetsItem.map(async (i: { src?: string; base64: string; prompt: string }) => {
-        if (i.base64) {
+        // if (if (i.base64) {)
           const mimeMatch = i.base64.match(/^data:audio\/([^;]+);base64,/);
           const mimeExt = mimeMatch ? mimeMatch[1] : "mp3";
           const mimeToExt: Record<string, string> = {
