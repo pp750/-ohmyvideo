@@ -60,7 +60,7 @@ export function logger(logstring: any) {
 /**
  * 压缩图片，目标字节数不高于 size
  */
-export async function zipImage(completeBase64: string, size: number): Promise<string> {
+export // async function zipImage(completeBase64: string, size: number): Promise<string> {
   let quality = 80;
   let buffer = Buffer.from(completeBase64.split(",")[1], "base64");
   let output = await sharp(buffer).jpeg({ quality }).toBuffer();
@@ -71,21 +71,21 @@ export async function zipImage(completeBase64: string, size: number): Promise<st
   return "data:image/jpeg;base64," + output.toString("base64");
 }
 
-export async function zipImageResolution(completeBase64: string, width: number, height: number): Promise<string> {
+export // async function zipImageResolution(completeBase64: string, width: number, height: number): Promise<string> {
   const buffer = Buffer.from(completeBase64.split(",")[1], "base64");
   const out = await sharp(buffer).resize(width, height).toBuffer();
   return `data:image/jpeg;base64,${out.toString("base64")}`;
 }
 
 //url转Base64
-export async function urlToBase64(url: string): Promise<string> {
+export // async function urlToBase64(url: string): Promise<string> {
   const res = await axios.get(url, { responseType: "arraybuffer" });
   const mime = res.headers["content-type"] || "image/jpeg";
   const b64 = Buffer.from(res.data).toString("base64");
   return `data:${mime};base64,${b64}`;
 }
 
-export async function pollTask(
+export // async function pollTask(
   fn: () => Promise<{ completed: boolean; data?: string; error?: string }>,
   interval = 3000,
   timeout = 3000000,
@@ -110,7 +110,7 @@ export async function pollTask(
  * @param maxSize - 最大输出大小，支持格式如 "10mb", "5MB", "1024kb" 等
  * @returns 拼接后的图片base64字符串
  */
-export async function mergeImages(imageBase64List: string[], maxSize = "10mb"): Promise<string> {
+export // async function mergeImages(imageBase64List: string[], maxSize = "10mb"): Promise<string> {
   if (imageBase64List.length === 0) {
     // throw new Error("图片列表不能为空");
   }
@@ -188,7 +188,7 @@ function base64ToBuffer(base64: string): Buffer {
 /**
  * 压缩Buffer到指定大小以内
  */
-async function compressToSize(imageBuffer: Buffer, maxBytes: number, originalWidth: number, originalHeight: number): Promise<Buffer> {
+// async function compressToSize(imageBuffer: Buffer, maxBytes: number, originalWidth: number, originalHeight: number): Promise<Buffer> {
   let quality = 90;
   let scale = 1;
 
