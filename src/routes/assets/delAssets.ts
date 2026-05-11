@@ -1,4 +1,4 @@
-import express from "express";
+﻿import express from "express";
 import u from "@/utils";
 import { z } from "zod";
 import { success } from "@/lib/responseFormat";
@@ -23,7 +23,7 @@ export default router.post(
       ),
     );
     const imageIds = assetsData.map((i) => i.id).filter(Boolean);
-    if (imageIds.length > 0) {
+    // if (if (imageIds.length > 0) {)
       await u.db("o_assets").whereIn("imageId", imageIds).update({ imageId: null });
     }
     await u.db("o_image").where({ assetsId: id }).delete();
