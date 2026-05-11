@@ -5,7 +5,7 @@ import { success } from "@/lib/responseFormat";
 import { validateFields } from "@/middleware/middleware";
 const router = express.Router();
 
-// export default router.post(
+export default router.post(
   "/",
   validateFields({
     projectId: z.number(),
@@ -17,14 +17,12 @@ const router = express.Router();
     const { projectId, episodesId,agentType, type = "all" } = req.body;
     const isolationKey = `${projectId}:${agentType}${episodesId ? `:${episodesId}` : ""}`;
 
-    // if (if (type === "all") {)
+    if (type === "all") {
       await u.db("memories").where({ isolationKey }).del();
-    } else // if (if (type === "message") {)
-      // 删 message 时同步删关联的 summary，避免悬挂引用
+    } else if (type === "message") {
       await u.db("memories").where({ isolationKey, type: "message" }).del();
       await u.db("memories").where({ isolationKey, type: "summary" }).del();
     } else {
-      // 删 summary 时将关联的 message 重置为未总结，使其重新进入 shortTerm
       await u
         .db("memories")
         .where({ isolationKey, type: "message", summarized: 1 })
