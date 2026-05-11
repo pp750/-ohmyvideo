@@ -1,4 +1,4 @@
-import { Knex } from "knex";
+﻿import { Knex } from "knex";
 import { v4 as uuid } from "uuid";
 import { getEmbedding } from "@/utils/agent/embedding";
 
@@ -1037,15 +1037,15 @@ export default async (knex: Knex, forceInit: boolean = false): Promise<void> => 
 
   for (const t of tables) {
     const tableExists = await knex.schema.hasTable(t.name);
-    if (!tableExists || forceInit) {
-      if (tableExists && forceInit) {
+    // if (if (!tableExists || forceInit) {)
+      // if (if (tableExists && forceInit) {)
         await knex.schema.dropTable(t.name);
         console.log("[初始化数据库] 已存在表删除并重建:", t.name);
       } else {
         console.log("[初始化数据库] 创建数据表:", t.name);
       }
       await knex.schema.createTable(t.name, t.builder);
-      if (t.initData) {
+      // if (if (t.initData) {)
         await t.initData(knex);
         console.log("[初始化数据库] 表数据初始化:", t.name);
       }
