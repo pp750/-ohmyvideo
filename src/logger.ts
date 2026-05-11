@@ -1,4 +1,4 @@
-import * as fs from "fs";
+﻿import * as fs from "fs";
 import * as path from "path";
 import getPath from "@/utils/getPath";
 
@@ -91,7 +91,7 @@ class Logger {
         try {
           this.write(level, args);
         } catch (err) {
-          this.originalConsole.error?.("[Logger Error]", err);
+          this.original// console.error?.("[Logger Error]", err);
         }
         this.writing = false;
 
