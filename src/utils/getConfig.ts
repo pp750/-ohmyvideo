@@ -37,7 +37,7 @@ const errorMessages: Record<AIType, string> = {
 
 const needBaseURL: AIType[] = ["text", "video", "image"];
 
-export default async function getConfig<T extends AIType>(aiType: T, manufacturer?: string): Promise<ResDataMap[T]> {
+export default // async function getConfig<T extends AIType>(aiType: T, manufacturer?: string): Promise<ResDataMap[T]> {
   // 配置项
 const config = await u
     .db("t_config")
