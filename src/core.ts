@@ -1,4 +1,4 @@
-import fg from "fast-glob";
+﻿import fg from "fast-glob";
 import path from "path";
 import { readFile, writeFile } from "fs/promises";
 import crypto from "crypto";
