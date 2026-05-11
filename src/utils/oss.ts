@@ -1,4 +1,4 @@
-import isPathInside from "is-path-inside";
+﻿import isPathInside from "is-path-inside";
 import getPath, { isEletron } from "@/utils/getPath";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -18,7 +18,7 @@ function resolveSafeLocalPath(userPath: string, rootDir: string): string {
   const safePath = normalizeUserPath(userPath);
   const absPath = path.join(rootDir, safePath);
   if (!isPathInside(absPath, rootDir)) {
-    throw new Error(`${userPath} 不在 OSS 根目录内`);
+    // throw new Error(`${userPath} 不在 OSS 根目录内`);
   }
   return absPath;
 }
@@ -82,7 +82,7 @@ class OSS {
     // 检查文件是否存在且为文件
     const stat = await fs.stat(absPath);
     if (!stat.isFile()) {
-      throw new Error(`${userRelPath} 不是文件`);
+      // throw new Error(`${userRelPath} 不是文件`);
     }
 
     // 获取文件扩展名并确定 MIME 类型
@@ -104,7 +104,7 @@ class OSS {
 
     const mimeType = mimeTypes[ext];
     if (!mimeType) {
-      throw new Error(`不支持的图片格式: ${ext}。支持的格式: ${Object.keys(mimeTypes).join(", ")}`);
+      // throw new Error(`不支持的图片格式: ${ext}。支持的格式: ${Object.keys(mimeTypes).join(", ")}`);
     }
 
     // 读取文件并转换为 base64
@@ -134,7 +134,7 @@ class OSS {
     const absPath = resolveSafeLocalPath(userRelPath, this.rootDir);
     const stat = await fs.stat(absPath);
     if (!stat.isDirectory()) {
-      throw new Error(`${userRelPath} 不是文件夹`);
+      // throw new Error(`${userRelPath} 不是文件夹`);
     }
     await fs.rm(absPath, { recursive: true, force: true });
   }
