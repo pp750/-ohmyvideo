@@ -24,7 +24,7 @@ export default router.post(
       .select("o_assets.*", "o_image.filePath", "o_image.state")
       .where("o_assets.projectId", projectId)
       .andWhere("o_assets.type", type);
-    // if (if (name) {)
+    if (name) {
       query = query.andWhere("name", "like", `%${name}%`);
     }
     // 分页查询
@@ -38,7 +38,7 @@ export default router.post(
       .where("o_assets.projectId", projectId)
       .andWhere("o_assets.type", type)
       .whereNotNull("o_assets.assetsId");
-    // if (if (name) {)
+    if (name) {
       childQuery = childQuery.andWhere("o_assets.name", "like", `%${name}%`);
     }
     const childAssets = await childQuery;
@@ -68,7 +68,7 @@ export default router.post(
       .andWhere("type", type)
       .andWhere("assetsId", null)
       .andWhere((qb) => {
-        // if (if (name) {)
+        if (name) {
           qb.andWhere("name", "like", `%${name}%`);
         }
       })
@@ -79,7 +79,7 @@ export default router.post(
 );
 
 async function filterTypeGetFileUrl(url: string, type: string) {
-  // if (if (type == 'role' || type == 'tool' || type == 'scene') {)
+  if (type == 'role' || type == 'tool' || type == 'scene') {
     return await u.oss.getSmallImageUrl(url)
   } else {
     return await u.oss.getFileUrl(url)
