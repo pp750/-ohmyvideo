@@ -1,4 +1,4 @@
-import { tool, jsonSchema, Tool } from "ai";
+﻿import { tool, jsonSchema, Tool } from "ai";
 import { z } from "zod";
 import _ from "lodash";
 import ResTool from "@/socket/resTool";
@@ -78,7 +78,7 @@ export default (toolCpnfig: ToolConfig) => {
       ),
       execute: async ({ key }) => {
         const thinking = msg.thinking(`正在获取${flowDataKeyLabels[key]}工作区数据...`);
-        console.log("[tools] get_flowData", key);
+        // console.log("[tools] get_flowData", key);
         const flowData: FlowData = await new Promise((resolve) => socket.emit("getFlowData", { key }, (res: any) => resolve(res)));
         thinking.appendText(`获取到${flowDataKeyLabels[key]}:\n` + JSON.stringify(flowData[key], null, 2));
         thinking.updateTitle(`获取${flowDataKeyLabels[key]}完成`);
