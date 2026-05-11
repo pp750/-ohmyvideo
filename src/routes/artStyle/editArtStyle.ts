@@ -1,4 +1,4 @@
-import express from "express";
+﻿import express from "express";
 import u from "@/utils";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
@@ -6,7 +6,7 @@ import { success } from "@/lib/responseFormat";
 import { validateFields } from "@/middleware/middleware";
 const router = express.Router();
 
-export default router.post(
+// export default router.post(
   "/",
   validateFields({
     id: z.number(),
