@@ -1,4 +1,4 @@
-import fs from "fs";
+﻿import fs from "fs";
 import path from "path";
 import getPath from "./getPath";
 
@@ -14,6 +14,7 @@ export function getArtPrompt(styleName: string, source: string, fileName: string
   if (!fs.existsSync(baseDir)) {
     return "";
   }
+
 
   // 获取 prefix.md 内容
   const prefixFile = findFileRecursive(baseDir, "prefix.md");
